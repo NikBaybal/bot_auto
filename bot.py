@@ -11,6 +11,8 @@ from bot_dialogs import states
 from bot_dialogs.main import main_dialog, about_dialog
 from bot_dialogs.record import record_dialog
 from config import Config, load_config
+import warnings
+warnings.filterwarnings("ignore", "\nPyarrow", DeprecationWarning)
 
 logger = logging.getLogger(__name__)
 config: Config = load_config()

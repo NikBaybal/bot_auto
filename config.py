@@ -4,8 +4,8 @@ from environs import Env
 
 @dataclass
 class TgBot:
-    token: str            # Токен для доступа к телеграм-боту
-    admin_ids: list[int]  # Список id администраторов бота
+    token: str
+    admin_ids: list[int]
 
 
 @dataclass
@@ -25,5 +25,4 @@ def load_config(path: str | None = None) -> Config:
         )
     )
 
-
-
+name_json = 'files/my-project-2023-375610-9c983bcdb0e0.json'

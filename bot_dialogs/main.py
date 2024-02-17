@@ -4,7 +4,7 @@ from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.widgets.text import Const,Format
 from . import states
 from aiogram.types import ContentType
-import texts.category
+import texts.start
 
 MAIN_MENU_BUTTON = Start(
     text=Const("☰ Main menu"),
@@ -29,13 +29,11 @@ main_dialog = Dialog(
     launch_mode=LaunchMode.ROOT,
 )
 
-main_window = Window(
-    Format(texts.start.about_us),
-    StaticMedia(path ='files/about.jpg',type = ContentType.PHOTO),
-    MAIN_MENU_BUTTON,
-    state=states.About.MAIN,
-)
-
 about_dialog = Dialog(
-    main_window
+    Window(
+        Format(texts.start.about_us),
+        StaticMedia(path ='../files/about.jpg', type = ContentType.PHOTO),
+        MAIN_MENU_BUTTON,
+        state=states.About.MAIN,
+    )
 )
