@@ -8,10 +8,10 @@ import datetime
 from aiogram.types import Message,CallbackQuery
 import utils
 
-def date_check(text: str) -> str:
+async def date_check(text: str) -> str:
     if datetime.date.fromisoformat(text):
         return text
-    raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+    raise ValueError("Вы ввели некорректную дату. Попробуйте в формате \"ДД.ММ\". Например, чтобы выбрать 1 февраля написать 01.02")
 
 async def correct_date_handler(
         message: Message,
@@ -31,7 +31,7 @@ async def error_date_handler(
     )
 
 main_window = Window(
-    Const("Введите желаемую дату в формате YYYY-MM-DD:"),
+    Const("Введите желаемую дату в формате \"ДД.ММ\". Например, чтобы выбрать 1 февраля написать 01.02:"),
     MAIN_MENU_BUTTON,
     TextInput(
         id='date_input',
@@ -69,7 +69,7 @@ hour_window = Window(
             on_click=hours_selection
          ),
     ),
-    Back(),
+    Back('Назад'),
     MAIN_MENU_BUTTON,
     state=states.Record.Hour,
     getter=get_hours,
