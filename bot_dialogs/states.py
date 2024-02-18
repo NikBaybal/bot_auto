@@ -6,5 +6,6 @@ class About(StatesGroup):
     MAIN = State()
 
 class Record(StatesGroup):
-    MAIN = State()
+    Master = State()
+    Date = State()
     Hour = State()

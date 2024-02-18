@@ -8,10 +8,67 @@ import datetime
 from aiogram.types import Message,CallbackQuery
 import utils
 
-async def date_check(text: str) -> str:
+async def get_master( dialog_manager: DialogManager,**_kwargs):
+    masters=utils.masters()
+    return {
+         "masters": masters,
+    }
+async def master_selection(callback: CallbackQuery, widget: Select,
+                             dialog_manager: DialogManager, item_id: str):
+    dialog_manager.dialog_data['master'] = item_id
+    await dialog_manager.next()
+
+
+master_window = Window(
+    Const(text='Выберите инструктора:'),
+    Column(
+        Select(
+            Format('{item}'),
+            id='master',
+            item_id_getter=lambda x: x,
+            items='masters',
+            on_click=master_selection
+         ),
+    ),
+    MAIN_MENU_BUTTON,
+    state=states.Record.Master,
+    getter=get_master,
+)
+
+
+
+async def get_date( dialog_manager: DialogManager,**_kwargs):
+    dates=utils.dates(dialog_manager.dialog_data.get('master'))
+    return {
+         "dates": dates,
+    }
+async def date_selection(callback: CallbackQuery, widget: Select,
+                             dialog_manager: DialogManager, item_id: str):
+    dialog_manager.dialog_data['date'] = item_id
+    await dialog_manager.next()
+
+
+date_window = Window(
+    Const(text='Выберите инструктора:'),
+    Column(
+        Select(
+            Format('{item}'),
+            id='date',
+            item_id_getter=lambda x: x,
+            items='dates',
+            on_click=date_selection
+         ),
+    ),
+    MAIN_MENU_BUTTON,
+    state=states.Record.Date,
+    getter=get_date,
+)
+
+"""
+def date_check(text: str) -> str:
     if datetime.date.fromisoformat(text):
         return text
-    raise ValueError("Вы ввели некорректную дату. Попробуйте в формате \"ДД.ММ\". Например, чтобы выбрать 1 февраля написать 01.02")
+    raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
 async def correct_date_handler(
         message: Message,
@@ -30,8 +87,8 @@ async def error_date_handler(
         text='Вы ввели некорректную дату. Попробуйте еще раз'
     )
 
-main_window = Window(
-    Const("Введите желаемую дату в формате \"ДД.ММ\". Например, чтобы выбрать 1 февраля написать 01.02:"),
+date_window = Window(
+    Const("Выберите дату:"),
     MAIN_MENU_BUTTON,
     TextInput(
         id='date_input',
@@ -39,19 +96,27 @@ main_window = Window(
         on_success=correct_date_handler,
         on_error=error_date_handler,
     ),
-    state=states.Record.MAIN,
+    state=states.Record.Date,
 )
+
+
+"""
+
+
+
+
+
 async def hours_selection(callback: CallbackQuery, widget: Select,
                              dialog_manager: DialogManager, item_id: str):
-    date=dialog_manager.dialog_data.get('user_input')
+    date=dialog_manager.dialog_data.get('date')
     hour=item_id
     user_name = callback.message.from_user.username
     utils.record_user(date, hour, user_name)
-    await callback.message.answer(text=f'Вы успешно записались!!!!'+'\n'f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
+    await callback.message.answer(text=f'Вы успешно записались!'+'\n'f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
 
 
 async def get_hours( dialog_manager: DialogManager,**_kwargs):
-    date=dialog_manager.dialog_data.get('user_input')
+    date=dialog_manager.dialog_data.get('date')
     hours=utils.free_hours(date)
     return {
          "hours": hours,
@@ -69,14 +134,19 @@ hour_window = Window(
             on_click=hours_selection
          ),
     ),
-    Back('Назад'),
+    Back(),
     MAIN_MENU_BUTTON,
     state=states.Record.Hour,
     getter=get_hours,
 )
 
+
+
+
+
 record_dialog = Dialog(
-    main_window,
+    master_window,
+    date_window,
     hour_window,
 
 )

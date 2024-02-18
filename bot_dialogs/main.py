@@ -17,7 +17,7 @@ main_dialog = Dialog(
         Start(
             text=Const('📝 Запись'),
             id="price",
-            state=states.Record.MAIN,
+            state=states.Record.Master,
         ),
         Start(
             text=Const('ℹ️ О нас'),
