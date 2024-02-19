@@ -9,3 +9,7 @@ class Record(StatesGroup):
     Master = State()
     Date = State()
     Hour = State()
+class Admin(StatesGroup):
+    MAIN = State()
+    Stat = State()
+    Users = State()

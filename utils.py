@@ -1,8 +1,6 @@
 import gspread
 import config
 import pandas
-import warnings
-warnings.filterwarnings("ignore", "\nPyarrow", DeprecationWarning)
 
 gc = gspread.service_account(filename=config.name_json)
 sh = gc.open_by_url("https://docs.google.com/spreadsheets/d/11af795c73hBh9kCRuT8dqc51fXvrVBX2tknP2QqWNMQ/edit#gid=0")

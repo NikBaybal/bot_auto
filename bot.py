@@ -10,7 +10,11 @@ from aiogram_dialog.api.exceptions import UnknownIntent
 from bot_dialogs import states
 from bot_dialogs.main import main_dialog, about_dialog
 from bot_dialogs.record import record_dialog
+from bot_dialogs.admin import admin_dialog
 from config import Config, load_config
+from menu import set_main_menu
+import database
+import texts.admin
 import warnings
 warnings.filterwarnings("ignore", "\nPyarrow", DeprecationWarning)
 
@@ -21,7 +25,14 @@ bot = Bot(token=config.tg_bot.token,
 
 
 async def start(message: Message, dialog_manager: DialogManager):
+    database.add_user(message.from_user.id, message.from_user.username, message.from_user.first_name)
     await dialog_manager.start(states.Main.MAIN, mode=StartMode.RESET_STACK)
+
+async def admin(message: Message, dialog_manager: DialogManager):
+    if message.from_user.id in config.tg_bot.admin_ids:
+        await dialog_manager.start(states.Admin.MAIN, mode=StartMode.RESET_STACK)
+    else:
+        await message.answer("Вы не администратор", parse_mode="HTML", reply_markup=None)
 
 
 async def on_unknown_intent(event: ErrorEvent, dialog_manager: DialogManager):
@@ -54,6 +65,7 @@ dialog_router.include_routers(
     main_dialog,
     about_dialog,
     record_dialog,
+    admin_dialog,
 )
 
 
@@ -61,6 +73,7 @@ def setup_dp():
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
     dp.message.register(start, F.text == "/start")
+    dp.message.register(admin, F.text == "/admin")
     dp.errors.register(
         on_unknown_intent,
         ExceptionTypeFilter(UnknownIntent),
@@ -76,6 +89,8 @@ async def main(bot: Bot):
         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                '[%(asctime)s] - %(name)s - %(message)s')
     logger.info('Starting bot')
+    # Настраиваем кнопку Menu
+    await set_main_menu(bot)
     dp = setup_dp()
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
