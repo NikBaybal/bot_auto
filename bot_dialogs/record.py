@@ -59,6 +59,7 @@ date_window = Window(
             on_click=date_selection
          ),
     ),
+    Back(),
     MAIN_MENU_BUTTON,
     state=states.Record.Date,
     getter=get_date,
@@ -73,7 +74,7 @@ async def hours_selection(callback: CallbackQuery, widget: Select,
     hour = item_id
     user_name = dialog_manager.dialog_data.get('user')
     utils.record_user(date, hour, user_name)
-    await callback.message.answer(text=f'Вы успешно записались!'+'\n'f'Выбранный инструктор: {master}'+'\n'f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
+    await callback.message.answer(text=f'Вы успешно записались!'+'\n'f'Инструктор: {master}'+'\n'f'Дата: {date}'+'\n'+f'Время: {hour}', parse_mode='HTML')
 
 async def get_hours( dialog_manager: DialogManager,event_from_user: User,**_kwargs):
     date=dialog_manager.dialog_data.get('date')
