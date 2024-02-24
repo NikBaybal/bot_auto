@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+    bot:
+        image: "nikbaybal/bot_auto:latest"
+        restart: "unless-stopped"
+        env_file:
+          - .env
+        volumes:
+          - "/app/my-project-2023.json:my-project-2023-375610-9c983bcdb0e0.json"

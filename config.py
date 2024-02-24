@@ -25,4 +25,4 @@ def load_config(path: str | None = None) -> Config:
         )
     )
 
-name_json = 'files/my-project-2023-375610-9c983bcdb0e0.json'
+name_json = 'my-project-2023-375610-9c983bcdb0e0.json'

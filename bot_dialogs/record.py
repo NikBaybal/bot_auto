@@ -75,6 +75,7 @@ async def hours_selection(callback: CallbackQuery, widget: Select,
     user_name = dialog_manager.dialog_data.get('user')
     utils.record_user(date, hour, user_name)
     await callback.message.answer(text=f'Вы успешно записались!'+'\n'f'Инструктор: {master}'+'\n'f'Дата: {date}'+'\n'+f'Время: {hour}', parse_mode='HTML')
+    await callback.message.answer('<a href="https://docs.google.com/spreadsheets/d/11af795c73hBh9kCRuT8dqc51fXvrVBX2tknP2QqWNMQ/edit?usp=sharing"> Ссылка на таблицу записей </a>',parse_mode='HTML')
 
 async def get_hours( dialog_manager: DialogManager,event_from_user: User,**_kwargs):
     date=dialog_manager.dialog_data.get('date')
