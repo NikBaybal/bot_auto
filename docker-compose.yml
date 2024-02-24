@@ -6,4 +6,6 @@ services:
         env_file:
           - .env
         volumes:
-          - "/app/my-project-2023.json:my-project-2023-375610-9c983bcdb0e0.json"
+          - type: bind
+            source: my-project-2023-375610-9c983bcdb0e0.json
+            target: /app/my-project-2023-375610-9c983bcdb0e0.json
